@@ -411,6 +411,7 @@ export default function Home() {
               ].map((testament, i) => (
                 <div key={i} className="bg-[#FFFFFF] p-8 flex flex-col gap-6 shadow-sm ring-1 ring-black/5">
                   <div className="flex items-center gap-4">
+                    
                     {/* <div className="w-12 h-12 rounded-full overflow-hidden">
                       <img
                         src={`https://i.pravatar.cc/150?u=${testament.id}`}
@@ -418,6 +419,7 @@ export default function Home() {
                         className="w-full h-full object-cover"
                       />
                     </div> */}
+
                     <div className={cn(
                       "w-12 h-12 rounded-full flex items-center justify-center shrink-0 border-2 font-black text-lg",
                       i === 0 && "bg-blue-50 border-blue-300 text-blue-600",
