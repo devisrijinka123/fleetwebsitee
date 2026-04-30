@@ -30,7 +30,7 @@ export default function Home() {
 
   // FMS state
   const [activeFMS, setActiveFMS] = useState<string>("");
-  const [currentFMSView, setCurrentFMSView] = useState<View>("reports");
+  const [currentFMSView, setCurrentFMSView] = useState<View>("monitor_overview");
 
   const handleFMSClick = (featureId: string, view: View) => {
     if (activeFMS === featureId) {
@@ -46,11 +46,11 @@ export default function Home() {
 
   const AGENT_DESCRIPTIONS: Record<string, string> = {
     "fleet optimizer": "Identifies underused and overworked vehicles, balances fleet workload, and maximizes asset utilization across your entire operation.",
-    "driver safety and performance": "Tracks harsh braking, acceleration, overspeeding, and safety scores — flagging at-risk drivers and enabling coaching before incidents occur.",
-    "maintenance monitor": "Predicts maintenance needs using fault codes, engine hours, and alert history — reducing unplanned breakdowns and extending vehicle life.",
+    "driver safety and performance": "Tracks harsh braking, acceleration, overspeeding, and safety scores - flagging at-risk drivers and enabling coaching before incidents occur.",
+    "maintenance monitor": "Predicts maintenance needs using fault codes, engine hours, and alert history - reducing unplanned breakdowns and extending vehicle life.",
     "fraud detection": "Detects suspicious fuel drain events, phantom fill-ups, and unauthorized asset use using multi-signal anomaly detection.",
-    "safety and compliance": "Monitors driver safety scores, regulatory deadlines, and policy adherence — keeping your fleet audit-ready at all times.",
-    "cost and finance tracker": "Tracks cost-per-mile, budget variances, and fuel spend — giving you clear visibility into where your fleet money is going.",
+    "safety and compliance": "Monitors driver safety scores, regulatory deadlines, and policy adherence - keeping your fleet audit-ready at all times.",
+    "cost and finance tracker": "Tracks cost-per-mile, budget variances, and fuel spend - giving you clear visibility into where your fleet money is going.",
     "strategic planner": "Provides long-term insights on fleet expansion, electrification readiness, and sustainability targets to support smarter business decisions."
   };
 
@@ -81,7 +81,7 @@ export default function Home() {
               <div className="absolute inset-0 bg-white/5" />
               <div className="absolute inset-0 flex items-center justify-center py-8 md:py-12 lg:py-16 px-4 md:px-6 lg:px-8">
                 <FixedDashboard
-                  url="Rfleet.ai/fleetSage"
+                  url="rfleet.ai/fleetSage"
                   maxWidth="1150px"
                   aspectRatio="1150/600"
                   canvasWidth={1404}
@@ -97,13 +97,13 @@ export default function Home() {
         <div className="bg-[#FFFFFF] py-16">
           <div className="max-w-7xl mx-auto px-6">
             <h2 className="text-2xl md:text-3xl font-bold mb-12 text-[#00031F] leading-tight text-center">
-              Ravity platforms are used by the world&apos;s largest automotive companies.
+              Ravity platforms are used by the world&apos;s largest fleet companies.
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {[
-                { name: 'maruti', ext: '.svg' },
+                { name: 'maruti1', ext: '.png', noFilter: true },
                 { name: 'renault', ext: '.png' },
-                { name: 'stellantis', ext: '.png' },
+                { name: 'aivis', ext: '.svg', noFilter: true },
                 { name: 'volvo', ext: '.png', noFilter: true },
               ].map((logo) => (
                 <div key={logo.name} className="bg-gray-50 aspect-[3/2] flex items-center justify-center p-8">
@@ -124,14 +124,14 @@ export default function Home() {
         <div className="bg-[#FFFFFF] pt-24 pb-24">
           <div className="max-w-7xl mx-auto px-6 space-y-24">
             {/* 1. Fleet Intelligence */}
-            <section id="fleet-intelligence" className="scroll-mt-32">
+            <section id="fleet-sage" className="scroll-mt-32">
               <div className="bg-[#FFFFFF] p-4 lg:p-6 flex flex-col lg:flex-row lg:aspect-[9/5] gap-6 lg:gap-8 rounded-none overflow-hidden">
                 <div className="lg:w-[39%] flex flex-col text-left h-full">
                   <div className="mb-4">
                     <div className="text-xs font-black text-[#F0197A] uppercase tracking-[0.2em] mb-2">{PRODUCT_SECTIONS[0].label}</div>
                     <h3 className="text-3xl font-bold text-[#00031F] leading-tight mb-2">{PRODUCT_SECTIONS[0].heading}</h3>
                     <p className="text-sm text-[#00031F]/65 font-medium leading-relaxed mb-3">{PRODUCT_SECTIONS[0].subtitle}</p>
-                    <p className="text-xs text-[#00031F]/80 font-medium">Click a question to see how Fleet Intelligence answers in real time.</p>
+                    <p className="text-xs text-[#00031F]/80 font-medium">Click a question to see how Fleet Sage answers in real time.</p>
                   </div>
                   <div className="flex-1 flex flex-col gap-2 overflow-y-auto no-scrollbar">
                     {FLEET_INTELLIGENCE_QUESTIONS.map((q) => (
@@ -161,9 +161,7 @@ export default function Home() {
                           activeQuestion === q.id ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
                         )}>
                           <div className="overflow-hidden">
-                            <div className="px-4 pb-4">
-                              <p className="text-sm text-[#00031F]/80 leading-relaxed font-medium">{q.answer.replace(/\*\*/g, '').split('.')[0]}.</p>
-                            </div>
+
                           </div>
                         </div>
                       </div>
@@ -380,20 +378,19 @@ export default function Home() {
                   <div className="absolute inset-0 bg-[url('/bckg4.png')] bg-cover bg-center scale-110 opacity-10" />
                   <div className="relative z-10 w-full h-full flex items-center justify-center p-6 lg:p-12">
                     <FixedDashboard
+                      key={activeFMS || "fms-default"}
                       initialView={currentFMSView}
                       hideSidebar
                       maxWidth="100%"
                       aspectRatio="6/5"
                       canvasWidth={1000}
-                      demoMode="fms"
-                      interactive={false}
+                      demoMode="none"
+                      interactive={true}
                     />
                   </div>
                 </div>
               </div>
             </section>
-
-
           </div>
         </div>
 
@@ -405,25 +402,36 @@ export default function Home() {
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {[
-                { name: "Robert Chen", role: "Ops Director, Global Logistics", text: "Ravity has completely transformed how we handle our maintenance. The AI agents identify risks before they become costly failures.", id: 1 },
-                { name: "Sarah Jenkins", role: "Fleet Manager, Tier 1 OEM", text: "The realtime insights provided by Fleet Intelligence enable my team to make decisions in minutes that used to take days of manual analysis.", id: 2 },
-                { name: "Vikram Malhotra", role: "Head of Mobility, Regional Transit", text: "Integrating Ravity into our existing telematics stack was seamless. The automation of compliance alone saved us 40 hours a week.", id: 3 },
-                { name: "Elena Rossi", role: "Chief Safety Officer, EuroFreight", text: "The driver platform doesn't just track scores; it changes behavior. Our incident rates dropped by 22% in the first quarter.", id: 4 },
-                { name: "David Thompson", role: "VP Strategy, Automotive Group", text: "Ravity is the first platform that feels like it was built for the modern era. It's intelligence-first, not just another dashboard.", id: 5 },
-                { name: "Anil Kulkarni", role: "Technical Lead, Connected Services", text: "The depth of telemetry data coupled with the agentic reasoning is unique. It's the most impactful mobility tool we've deployed.", id: 6 }
+                { role: "Ops Director, Global Logistics", text: "The platform has completely transformed how we handle our maintenance. The AI agents identify risks before they become costly failures.", id: 1 },
+                { role: "Fleet Manager, Tier 1 OEM", text: "The realtime insights enable my team to make decisions in minutes that used to take days of manual analysis.", id: 2 },
+                { role: "Head of Mobility, Regional Transit", text: "Integrating the platform into our existing telematics stack was seamless. The automation of compliance alone saved us 40 hours a week.", id: 3 },
+                { role: "Chief Safety Officer, EuroFreight", text: "The driver platform doesn't just track scores; it changes behavior. Our incident rates dropped by 22% in the first quarter.", id: 4 },
+                { role: "VP Strategy, Automotive Group", text: "This is the first platform that feels like it was built for the modern era. It's intelligence-first, not just another dashboard.", id: 5 },
+                { role: "Technical Lead, Connected Services", text: "The depth of telemetry data coupled with the agentic reasoning is unique. It's the most impactful mobility tool we've deployed.", id: 6 }
               ].map((testament, i) => (
                 <div key={i} className="bg-[#FFFFFF] p-8 flex flex-col gap-6 shadow-sm ring-1 ring-black/5">
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-full overflow-hidden">
+                    {/* <div className="w-12 h-12 rounded-full overflow-hidden">
                       <img
                         src={`https://i.pravatar.cc/150?u=${testament.id}`}
                         alt={testament.name}
                         className="w-full h-full object-cover"
                       />
+                    </div> */}
+                    <div className={cn(
+                      "w-12 h-12 rounded-full flex items-center justify-center shrink-0 border-2 font-black text-lg",
+                      i === 0 && "bg-blue-50 border-blue-300 text-blue-600",
+                      i === 1 && "bg-purple-50 border-purple-300 text-purple-600",
+                      i === 2 && "bg-orange-50 border-orange-300 text-orange-600",
+                      i === 3 && "bg-green-50 border-green-300 text-green-600",
+                      i === 4 && "bg-pink-50 border-pink-300 text-pink-600",
+                      i === 5 && "bg-teal-50 border-teal-300 text-teal-600",
+                    )}>
+                      {testament.role.charAt(0)}
                     </div>
                     <div>
                       <div className="font-bold text-[#00031F]">{testament.name}</div>
-                      <div className="text-[10px] font-bold text-[#00031F]/65 uppercase tracking-widest">{testament.role}</div>
+                      <div className="text-[13px] font-bold text-[#00031F]/65 uppercase tracking-widest">{testament.role}</div>
                     </div>
                   </div>
                   <p className="text-[#00031F]/80 text-[15px] font-medium leading-relaxed italic">
@@ -439,7 +447,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6 mb-24 pt-12">
           <div className="flex flex-col items-center text-center space-y-8">
             <h2 className="text-3xl md:text-5xl font-bold text-[#00031F] max-w-4xl leading-tight">
-              Ready to see Ravity in action?
+              Ready to see Ravity Fleet in action?
             </h2>
             <button
               onClick={() => {

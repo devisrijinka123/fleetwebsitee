@@ -13,7 +13,7 @@ export const FLEET_INTELLIGENCE_QUESTIONS = [
   },
   {
     id: "failure-risk",
-    question: "Show vehicles at risk of failure.",
+    question: "Show vehicles at risk of failure?",
     answer: "I've identified **3 high-risk assets**: \n1. **SCANIA 48913-B-7**: High transmission vibration detected.\n2. **TATA 1102-X-4**: Brake pad thickness below 15%.\n3. **VOLVO 2291-B-2**: Unusual battery voltage fluctuations."
   },
   {
@@ -91,12 +91,12 @@ export const CAMERAS_VIDEO_FEATURES: { id: string; title: string; description: s
   {
     id: "ai-alerts",
     title: "AI-Powered Alerts",
-    description: "Real-time detection of drowsy driving, distracted behavior, hard braking, and tailgating events."
+    description: "Real-time monitoring of driver behaviour, including harsh acceleration, hard braking, collision and tailgating."
   },
   {
     id: "event-timeline",
-    title: "Event Timeline",
-    description: "Chronological log of AI-detected safety events with video clips, severity ratings, and driver context."
+    title: "Reports",
+    description: "Access trip summaries and video alert insights, all in one place."
   },
   {
     id: "live-streaming",
@@ -110,20 +110,20 @@ export const PRODUCT_SECTIONS = [
     id: "fleet-intelligence",
     label: "Fleet Sage",
     heading: "Less Dashboards. More Decisions. Powered by AI.",
-    subtitle: "Your AI teammate that cuts through the noise. No digging through dashboards \u2014 just clear answers and smart next steps.",
+    subtitle: "Your AI teammate that cuts through the noise. No digging through dashboards - just clear answers and smart next steps.",
     status: "live" as const
   },
   {
     id: "fms",
     label: "Fleet Management System",
     heading: "Does What Others Do. Thinks Like Others Don\u2019t.",
-    subtitle: "Full fleet capabilities \u2014 with AI that sees what\u2019s coming before you do.",
+    subtitle: "Full fleet capabilities - with AI that sees what\u2019s coming before you do.",
     status: "live" as const
   },
   {
     id: "ai-fleet-manager",
     label: "AI Fleet Manager",
-    heading: "It\u2019s Like Having a Manager Who Never Sleeps.",
+    heading: "It\u2019s Like Having a Buddy Who Never Sleeps.",
     subtitle: "24/7 monitoring. Early warnings. Problems handled before they matter.",
     status: "coming-soon" as const
   },

@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 export default function FeaturesPage() {
   const router = useRouter();
   useEffect(() => {
-    router.replace("/#fleet-intelligence");
+    router.replace("/#fleet-sage");
   }, [router]);
   return null;
 }

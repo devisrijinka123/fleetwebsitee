@@ -40,7 +40,7 @@ import {
 } from "recharts";
 import { FleetSageIcon, AIFleetManagerIcon, OverviewIcon, MyFleetIcon, MaintenanceIcon, DispatchIcon, ReportsIcon, LeaderboardIcon, SetupAdminIcon } from "@/components/icons/SidebarIcons"; import { FLEET_INTELLIGENCE_QUESTIONS } from "@/constants/products";
 
-export type View = "copilot" | "overview" | "fleet" | "reports" | "maintenance" | "driver" | "dispatch" | "cameras" | "monitor_overview";
+export type View = "copilot" | "overview" | "fleet" | "reports" | "maintenance" | "driver" | "dispatch" | "cameras" | "monitor_overview" | "alerts";
 
 interface DashboardDemoProps {
   initialView?: View;
@@ -70,7 +70,7 @@ export function DashboardDemo({
 
   useEffect(() => {
     setActiveView(initialView);
-  }, [initialView]);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // FMS Demo Animation Logic
   useEffect(() => {
@@ -81,8 +81,8 @@ export function DashboardDemo({
     const runSequence = async () => {
       if (isCancelled) return;
 
-      // 1. Start with My Fleet
-      setActiveView("fleet");
+      // 1. Start with Overview first
+      setActiveView("monitor_overview");
 
       await new Promise(r => setTimeout(r, 2000));
       if (isCancelled) return;
@@ -172,7 +172,7 @@ export function DashboardDemo({
               </div>
               <div className="space-y-2 mt-2">
                 <SidebarItem icon={<MaintenanceIcon width="22" height="22" />} label="Vehicle Maintenance" active={activeView === "maintenance"} onClick={() => setActiveView("maintenance")} />
-                <SidebarItem icon={<Bell size={22} />} label="All Alerts" active={false} onClick={() => { }} />
+                <SidebarItem icon={<Bell size={22} />} label="All Alerts" active={activeView === "alerts"} onClick={() => setActiveView("alerts")} />
                 <SidebarItem icon={<DispatchIcon width="22" height="22" />} label="Dispatch Management" active={activeView === "dispatch"} onClick={() => setActiveView("dispatch")} />
                 <SidebarItem icon={<ReportsIcon width="22" height="22" />} label="Reports" active={activeView === "reports"} onClick={() => setActiveView("reports")} />
                 <SidebarItem icon={<LeaderboardIcon width="22" height="22" />} label="Driver Leaderboard" active={activeView === "driver"} onClick={() => setActiveView("driver")} />
@@ -202,8 +202,9 @@ export function DashboardDemo({
                       activeView === "maintenance" ? "Vehicle Maintenance" :
                         activeView === "dispatch" ? "Dispatch Management" :
                           activeView === "reports" ? "Reports" :
-                            activeView === "cameras" ? (cameraShowAllAlerts || externalCameraFeature === "ai-alerts" ? "All Alerts" : externalCameraFeature === "event-timeline" ? "Event Timeline" : "Cameras & Video") :
-                              activeView}
+                            activeView === "cameras" ? (cameraShowAllAlerts || externalCameraFeature === "ai-alerts" ? "All Alerts" : externalCameraFeature === "event-timeline" ? "Reports" : "Cameras & Video") :
+                              activeView === "alerts" ? "All Alerts" :
+                                activeView}
           </h1>
           <div className="flex items-center gap-4 text-[#00031F]/65 shrink-0">
             <button className="p-2 hover:bg-black/5 rounded-lg transition-colors"><Search size={20} /></button>
@@ -226,6 +227,7 @@ export function DashboardDemo({
           {activeView === "dispatch" && <DispatchView />}
           {activeView === "cameras" && <CamerasView externalFeature={externalCameraFeature} onShowAllAlerts={() => setCameraShowAllAlerts(true)} showAllAlerts={cameraShowAllAlerts || externalCameraFeature === "ai-alerts"} />}
           {activeView === "overview" && <VirtualManagerView externalAgent={externalAgent} />}
+          {activeView === "alerts" && <AllAlertsView />}
         </div>
 
       </main>
@@ -319,7 +321,7 @@ function CopilotView({ externalPrompt, hideHistory = false }: { externalPrompt?:
       setUserInputValue("");
 
       setTimeout(() => {
-        const responseText = MOCKED_RESPONSES[prompt] || "[[Book a demo]] to see Fleet Intelligence in action, or try one of the questions on the left.";
+        const responseText = MOCKED_RESPONSES[prompt] || "[[Book a demo]] to see Fleet Sage in action, or try one of the questions on the left.";
         const words = responseText.split(" ");
 
         setMessages(prev => [...prev, { id: responseId, type: 'response', text: "", isStreaming: true }]);
@@ -430,8 +432,7 @@ function CopilotView({ externalPrompt, hideHistory = false }: { externalPrompt?:
         >
           {messages.length === 0 && !typedPrompt && !userInputValue && (
             <>
-              <h2 className="text-2xl lg:text-4xl font-bold text-[#00031F] mb-8 lg:mb-12">Ask anything about your fleet</h2>
-              {!hideHistory && (
+              <h2 className="copilot-heading text-2xl lg:text-4xl font-bold mb-8 lg:mb-12">Ask anything about your fleet</h2>            {!hideHistory && (
                 <div className="w-full max-w-2xl space-y-3">
                   <div className="flex flex-wrap justify-center gap-3">
                     {FLEET_INTELLIGENCE_QUESTIONS.slice(0, 4).map((q) => (
@@ -1251,7 +1252,7 @@ function DispatchView() {
 
 const CAMERA_FEEDS = [
   { id: "front", label: "Front Dash", vehicle: "SCANIA 5463-T-1", videoSrc: "/video1.mp4" },
-  { id: "cabin", label: "Cabin", vehicle: "SCANIA 5463-T-1", videoSrc: "/video3.mp4" },
+  { id: "cabin", label: "Cabin", vehicle: "SCANIA 5463-T-1", videoSrc: "/video4.mp4" },
   // { id: "rear", label: "Rear Cargo", vehicle: "VOLVO 2291-B-2" },
   // { id: "side", label: "Side View", vehicle: "VOLVO 2291-B-2" },
 ];
@@ -1310,7 +1311,7 @@ function AllAlertsView() {
       <div className="px-8 pt-6 pb-0 shrink-0">
         {/* <h2 className="text-2xl font-extrabold text-[#00031F] mb-1">All Alerts</h2>
         <p className="text-lg font-bold text-[#D97757] mb-4">Alert History</p> */}
-        <p className="text-sm font-bold text-[#D97757] mb-3">Alert History</p>
+        <p className="text-sm font-bold text-[#D97757] mb-5">Alert History</p>
 
         {/* Tabs + Date */}
         <div className="flex items-center justify-between border-b border-black/5">
@@ -1873,10 +1874,12 @@ function SidebarItem({
         {icon}
         <div className="flex flex-col">
           <span className="text-[15px] font-bold tracking-tight hidden lg:inline">{label}</span>
+          {/* <span className="text-[15px] font-bold tracking-tight">{label}</span> */}
           {badge && <span className="text-[10px] font-black text-[#F0197A] bg-white/10 px-2 py-0.5 rounded-full uppercase tracking-tighter lg:inline hidden">{badge}</span>}
         </div>
       </div>
       {hasSubmenu && <Plus size={16} className="opacity-40 hidden lg:inline" />}
+      {/* {hasSubmenu && <Plus size={16} className="opacity-40" />} */}
     </button>
   );
 }
@@ -1971,19 +1974,19 @@ interface Alert {
 }
 
 const AGENTS = [
-  "fleet operations intelligence",
-  "maintenance and reliability system",
-  "safety and compliance monitor",
-  "driver and workforce management",
-  "financial analytics and optimisation",
-  "strategic planning and sustainability",
-  "fraud detection and prevention"
+  "Fleet Optimizer",
+  "Maintenance Monitor",
+  "Safety and Compliance",
+  "Driver Safety and Performance",
+  "Cost and Finance Tracker",
+  "Strategic Planner",
+  "Fraud Detection"
 ];
 
 const MOCK_ALERTS: Alert[] = [
   {
     id: "1",
-    agent: "maintenance and reliability system",
+    agent: "Maintenance Monitor",
     title: "Unexpected Fuel Consumption Spike - Truck 42",
     criticality: "red",
     timestamp: "Just now",
@@ -2012,7 +2015,7 @@ const MOCK_ALERTS: Alert[] = [
   },
   {
     id: "2",
-    agent: "safety and compliance monitor",
+    agent: "Safety and Compliance",
     title: "Harsh Braking Pattern Detected - Route B4",
     criticality: "yellow",
     timestamp: "5 mins ago",
@@ -2041,7 +2044,7 @@ const MOCK_ALERTS: Alert[] = [
   },
   {
     id: "3",
-    agent: "fraud detection and prevention",
+    agent: "Fraud Detection",
     title: "Unusual Fuel Card Transaction Location",
     criticality: "red",
     timestamp: "12 mins ago",
@@ -2070,7 +2073,7 @@ const MOCK_ALERTS: Alert[] = [
   },
   {
     id: "4",
-    agent: "fleet operations intelligence",
+    agent: "Fleet Optimizer",
     title: "Idling Time Exceeding Threshold - Warehouse 7",
     criticality: "green",
     timestamp: "1 hour ago",
@@ -2099,7 +2102,7 @@ const MOCK_ALERTS: Alert[] = [
   },
   {
     id: "5",
-    agent: "driver and workforce management",
+    agent: "Driver Safety and Performance",
     title: "Shift Hour Limit Approaching - Driver R. Singh",
     criticality: "yellow",
     timestamp: "2 hours ago",
@@ -2128,7 +2131,7 @@ const MOCK_ALERTS: Alert[] = [
   },
   {
     id: "6",
-    agent: "financial analytics and optimisation",
+    agent: "Cost and Finance Tracker",
     title: "Cost Per Mile Spike - Region North",
     criticality: "yellow",
     timestamp: "6 hours ago",
@@ -2685,7 +2688,7 @@ export function OverviewDashboardView() {
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-green-500" />
             <span className="text-xs font-bold text-[#00031F]">Live · Last 24 hours</span>
-            <span className="text-xs text-gray-400">Updated Apr 27, 2026</span>
+            {/* <span className="text-xs text-gray-400">Updated Apr 27, 2026</span> */}
           </div>
           <span className="text-[11px] text-gray-400 italic">Charts below reflect the selected date range</span>
         </div>
@@ -2791,7 +2794,7 @@ export function OverviewDashboardView() {
                 <BarChart data={ovStopDuration} barSize={18}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#F3F4F6" vertical={false} />
                   <XAxis dataKey="date" tick={{ fontSize: 10, fill: "#9CA3AF" }} axisLine={false} tickLine={false} />
-                  <YAxis tick={{ fontSize: 10, fill: "#9CA3AF" }} axisLine={false} tickLine={false} tickFormatter={(v: number) => v >= 1000 ? `${(v/1000).toFixed(0)}k` : String(v)} />
+                  <YAxis tick={{ fontSize: 10, fill: "#9CA3AF" }} axisLine={false} tickLine={false} tickFormatter={(v: number) => v >= 1000 ? `${(v / 1000).toFixed(0)}k` : String(v)} />
                   <Tooltip />
                   <Bar dataKey="min" fill="#2ABFBF" radius={[3, 3, 0, 0]} />
                 </BarChart>
@@ -2923,7 +2926,7 @@ export function OverviewDashboardView() {
 
           {/* Driver Score */}
           <OvCard title="Driver Score (Overall)" subtitle="Least Five Drivers">
-            <div className="mb-2"><OvAxisTag label="X Driver" /><OvAxisTag label="Y Score" /></div>
+            {/* <div className="mb-2"><OvAxisTag label="X Driver" /><OvAxisTag label="Y Score" /></div> */}
             <div className="space-y-3">
               {ovDriverScores.map((d) => (
                 <div key={d.id} className="flex items-center gap-2">
@@ -2944,14 +2947,14 @@ export function OverviewDashboardView() {
 
           {/* Eco Driver Score */}
           <OvCard title="Eco Driver Score" subtitle="Fuel-efficient driving behaviour">
-            <div className="mb-2"><OvAxisTag label="Type Gauge + breakdown" /><OvAxisTag label="Y Score 0–100" /></div>
+            {/* <div className="mb-2"><OvAxisTag label="Type Gauge + breakdown" /><OvAxisTag label="Y Score 0–100" /></div> */}
             <div className="text-center py-2">
-              <div className="text-3xl font-black text-green-500">60</div>
+              <div className="text-3xl font-black text-green-500">62</div>
               <div className="text-[11px] text-gray-400 mb-2">Fleet avg eco score</div>
-              <OvProgressBar value={60} max={100} color="#F5A623" />
+              <OvProgressBar value={62} max={100} color="#F5A623" />
             </div>
             <div className="mt-3 space-y-2">
-              {[["Smooth accel.", 62, "#F5A623"], ["Smooth braking", 65, "#F5A623"], ["Speed mgmt.", 87, "#22C55E"], ["Idle avoidance", 80, "#22C55E"]].map(([label, val, color]) => (
+              {[["Harsh accel.", 97, "#22C55E"], ["Harsh braking", 85, "#22C55E"], ["Speed mgmt.", 91, "#22C55E"], ["Idle avoidance", 97, "#22C55E"]].map(([label, val, color]) => (
                 <div key={String(label)} className="flex items-center gap-2">
                   <span className="text-[11px] text-gray-500 w-24 shrink-0">{label}</span>
                   <OvProgressBar value={Number(val)} max={100} color={String(color)} />
@@ -3058,12 +3061,12 @@ export function OverviewDashboardView() {
             <div className="mb-2"><OvAxisTag label="X Vehicle" /><OvAxisTag label="Y Overdue days" /></div>
             <div className="h-48">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={ovServiceOverdue} layout="vertical" barSize={18}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#F3F4F6" horizontal={false} />
-                  <XAxis type="number" tick={{ fontSize: 10, fill: "#9CA3AF" }} axisLine={false} tickLine={false} />
-                  <YAxis type="category" dataKey="id" tick={{ fontSize: 9, fill: "#9CA3AF" }} axisLine={false} tickLine={false} width={65} />
-                  <Tooltip />
-                  <Bar dataKey="days" radius={[0, 3, 3, 0]}>
+                <BarChart data={ovServiceOverdue} barSize={28}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#F3F4F6" vertical={false} />
+                  <XAxis dataKey="id" tick={{ fontSize: 9, fill: "#9CA3AF" }} axisLine={false} tickLine={false} />
+                  <YAxis tick={{ fontSize: 10, fill: "#9CA3AF" }} axisLine={false} tickLine={false} />
+                  <Tooltip formatter={(value) => [value, "Overdue days"]} />
+                  <Bar dataKey="days" radius={[3, 3, 0, 0]}>
                     {ovServiceOverdue.map((d, i) => <Cell key={i} fill={d.color} />)}
                   </Bar>
                 </BarChart>

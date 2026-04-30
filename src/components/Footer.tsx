@@ -10,7 +10,7 @@ export function Footer() {
         {/* Copyright / Social Bar */}
         <div className="pt-12 border-t border-black/10 flex flex-col md:flex-row justify-between items-start md:items-center gap-8 text-sm font-bold uppercase tracking-widest text-[#00031F]/65 pb-12">
           <div className="flex flex-col gap-2">
-            <span>copyright 2026 ravity{" "}
+            <span>copyright 2026 ravity fleet{" "}
               <span className="lowercase">(powered by{" "}
                 <Link href="https://www.ravity.io/" target="_blank" className="hover:text-[#F00D69] transition-colors">
                   ravity.io

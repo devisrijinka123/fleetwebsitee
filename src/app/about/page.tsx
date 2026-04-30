@@ -100,7 +100,7 @@ export default function AboutPage() {
                 source: "NASSCOM",
                 title: "Ravity Software Solutions recognized as a NASSCOM Emerge 50 Winner",
                 date: "2025",
-                url: "https://nasscom.in/emerge50/winner/ravity-software-solutions.html"
+                url: "https://nasscom.in/emerge50-2025/winner/ravity-software-solutions.html"
               },
               {
                 source: "SILICONINDIA",
@@ -146,7 +146,7 @@ export default function AboutPage() {
 
           <div className="bg-[#FFFFFF] p-10 md:p-16 text-center space-y-6 shadow-sm ring-1 ring-black/6">
             <p className="text-xl md:text-2xl font-medium text-[#00031F]/85 leading-relaxed">
-              We are always looking to work with the most exceptional people. Reach out if you are excited by the future of fleet intelligence.
+              We are always looking to work with the most exceptional people. Reach out if you are excited by the future of fleet sage.
             </p>
             <a
               href="mailto:careers@ravity.io"

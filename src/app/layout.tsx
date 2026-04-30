@@ -24,10 +24,10 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
- return (
+  return (
     <html lang="en">
       <head>
-        <link rel="icon" href="/favicon.ico" type="image/jpeg" />
+        {/* <link rel="icon" href="/favicon.png" type="image/png" /> */}
       </head>
       <body className={`${plusJakarta.variable} ${geistMono.variable} antialiased font-sans`}>
         <div style={{ zoom: '0.9' }}>
@@ -37,3 +37,23 @@ export default function RootLayout({
     </html>
   );
 }
+
+// export const metadata: Metadata = {
+//   title: "Ravity Fleet",
+//   description: "Power your mobility stack with artificial intelligence",
+//   icons: {
+//     icon: "/favicon.png",
+//   },
+// };
+
+// export default function RootLayout({ children }) {
+//   return (
+//     <html lang="en">
+//       <body className={`${plusJakarta.variable} ${geistMono.variable} antialiased font-sans`}>
+//         <div style={{ zoom: '0.9' }}>
+//           <LayoutShell>{children}</LayoutShell>
+//         </div>
+//       </body>
+//     </html>
+//   );
+// }
